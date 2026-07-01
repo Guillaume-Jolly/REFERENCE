@@ -16,7 +16,7 @@ L’agent **ne doit pas** compter sur sa mémoire seule : les hooks garantissent
 ## Règle agent (backup si hook désactivé)
 
 1. **Premier appel shell** du tour → `npm run version:prompt`, sauf opt-out explicite user (`même X`).
-2. **Fin de tâche distincte** → `npm run version:task` + ligne Y dans `docs/traceability/changelog/DEV_LOG_2_2.md`.
+2. **Fin de tâche distincte** → `npm run version:task` + ligne Y dans le DEV_LOG (`version.config.json` → `devLogRelativePath`).
 3. **Fin de prompt** → compléter la section DEV_LOG (titre, but, validations) ; déplacer vers Historique si terminé.
 4. **Commits** → relire DEV_LOG : **1 ligne Y ≈ 1 commit atomique** (`git add` ciblé, message = résumé Y).
 
@@ -37,4 +37,4 @@ L’agent **ne doit pas** compter sur sa mémoire seule : les hooks garantissent
 |---------|------|
 | `build-revision.json` | X/Y versionnés git |
 | `public/build-info.json` | Miroir runtime (gitignoré) |
-| `DEV_LOG_2_2.md` | Une section par X ; ⚠️ = à compléter |
+| DEV_LOG (voir `version.config.json`) | Une section par X ; ⚠️ = à compléter |

@@ -7,7 +7,6 @@ import { createHash } from 'node:crypto'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { projectLabel } from './lib/version-config.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const revisionPath = join(root, 'build-revision.json')
@@ -86,4 +85,4 @@ const buildInfo = {
 mkdirSync(dirname(publicBuildInfoPath), { recursive: true })
 writeFileSync(publicBuildInfoPath, `${JSON.stringify(buildInfo, null, 2)}\n`)
 
-console.log(`[${projectLabel(root)}] Tâche → ${versionLabel}`)
+console.log(`[Havre des Brumes] Tâche → ${versionLabel}`)

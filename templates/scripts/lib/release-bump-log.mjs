@@ -2,12 +2,13 @@
  * Journal local des bumps A/B/C (git push / MEP).
  */
 import { appendFileSync, mkdirSync } from 'node:fs'
-import { dirname } from 'node:path'
+import { dirname, join } from 'node:path'
 import { formatSemver } from './release-version.mjs'
-import { releaseEventsPath } from './version-config.mjs'
+
+const LOG_REL = join('docs', 'traceability', 'changelog', 'release-events.jsonl')
 
 export function appendReleaseEvent(root, event) {
-  const path = releaseEventsPath(root)
+  const path = join(root, LOG_REL)
   mkdirSync(dirname(path), { recursive: true })
   appendFileSync(path, `${JSON.stringify({ at: new Date().toISOString(), ...event })}\n`)
 }

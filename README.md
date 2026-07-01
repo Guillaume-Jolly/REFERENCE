@@ -8,11 +8,20 @@ Dépôt **central** : docs, templates et scripts pour initialiser n'importe quel
 
 ## Démarrage rapide (nouveau projet)
 
+**Playbook agent complet :** [`docs/processes/copier-infra-reference.md`](./docs/processes/copier-infra-reference.md)
+
 ```powershell
 cd C:\Dev\Project\REFERENCE
-node scripts/bootstrap-project.mjs "C:\Dev\Project\MonApp"
+# 1. Copier templates/project.bootstrap.vars.example.json → MonApp/project.bootstrap.vars.json et remplir
+node scripts/bootstrap-project.mjs "C:\Dev\Project\MonApp" --vars "C:\Dev\Project\MonApp\project.bootstrap.vars.json"
 cd C:\Dev\Project\MonApp
 npm run hooks:install
+```
+
+**Projet existant (resync infra) :**
+
+```powershell
+node scripts/upgrade-project-from-reference.mjs "C:\Dev\Project\MonApp" --vars "C:\Dev\Project\MonApp\project.bootstrap.vars.json"
 ```
 
 Puis :

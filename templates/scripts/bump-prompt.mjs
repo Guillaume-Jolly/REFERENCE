@@ -7,7 +7,6 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { appendDevLogOpenSection } from './lib/dev-log-open-section.mjs'
-import { projectLabel } from './lib/version-config.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const revisionPath = join(root, 'build-revision.json')
@@ -87,4 +86,4 @@ writeFileSync(publicBuildInfoPath, `${JSON.stringify(buildInfo, null, 2)}\n`)
 
 appendDevLogOpenSection(root, revision, versionLabel)
 
-console.log(`[${projectLabel(root)}] Prompt → ${versionLabel}`)
+console.log(`[Havre des Brumes] Prompt → ${versionLabel}`)

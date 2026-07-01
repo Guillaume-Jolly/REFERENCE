@@ -5,6 +5,7 @@ import { createHash } from 'node:crypto'
 import { execSync } from 'node:child_process'
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { readVersionConfig } from './version-config.mjs'
 
 export function runGit(root, command) {
   try {
@@ -47,14 +48,15 @@ export function getChangedPaths(root) {
     .filter(Boolean)
 }
 
-const VERSION_META_PATHS = new Set([
-  'build-revision.json',
-  'docs/traceability/changelog/DEV_LOG_2_2.md',
-])
+function versionMetaPaths(root) {
+  const devLog = readVersionConfig(root).devLogRelativePath.replace(/\\/g, '/')
+  return new Set(['build-revision.json', devLog])
+}
 
-export function isVersionMetaOnlyChange(paths) {
+export function isVersionMetaOnlyChange(root, paths) {
   if (paths.length === 0) return true
-  return paths.every((p) => VERSION_META_PATHS.has(p.replace(/\\/g, '/')))
+  const meta = versionMetaPaths(root)
+  return paths.every((p) => meta.has(p.replace(/\\/g, '/')))
 }
 
 export function readRevisionState(root) {

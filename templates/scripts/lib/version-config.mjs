@@ -9,7 +9,7 @@ const DEFAULTS = {
   devLogRelativePath: 'docs/traceability/changelog/DEV_LOG.md',
   versionIndexRelativePath: 'docs/traceability/changelog/VERSION-INDEX.md',
   releaseEventsRelativePath: 'docs/traceability/changelog/release-events.jsonl',
-  gitignoreArchiveDirs: ['old_assets/', 'old_v2.1/', 'archive/'],
+  gitignoreArchiveDirs: ['old_assets/', 'old_v2.1/', 'old_2_2/', 'archive/'],
 }
 
 export function readVersionConfig(root) {

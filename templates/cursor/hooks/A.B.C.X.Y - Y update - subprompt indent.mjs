@@ -100,7 +100,7 @@ if (!state || state.fingerprint === currentFingerprint) {
 }
 
 const changedPaths = getChangedPaths(root)
-if (isVersionMetaOnlyChange(changedPaths)) {
+if (isVersionMetaOnlyChange(root, changedPaths)) {
   versionHook = logVersionHook(root, {
     hook: 'stop',
     hookName: VERSION_HOOK_Y_NAME,

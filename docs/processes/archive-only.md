@@ -21,7 +21,7 @@
 ## Autorisé : move vers gitignore
 
 1. Choisir une destination **listée dans `.gitignore`** du projet, ex. :
-   - `old_assets/`, `old_v2.1/`, `archive/YYYY-MM-DD-<motif>/`
+   - `old_assets/`, `old_v2.1/`, **`old_{A}_{B}/`** (reliquats fin de phase semver — ex. `old_2_2/`, `old_2_3/`), `archive/YYYY-MM-DD-<motif>/`
    - `Input chatgpt/`, `.tmp/`, `deploy/` (selon projet)
 2. **Fichiers git** : `git mv` → zone gitignorée (fichier **conservé sur disque**)
 3. **Fichiers non versionnés** : `mv` / `Move-Item` → zone gitignorée
@@ -47,4 +47,14 @@ Copier : [`templates/cursor/rules/01-no-deletion-archive-only.mdc`](../../templa
 
 Définir dans `AGENTS.md` ou `docs/agent-guide/` la liste des **zones gitignorées** autorisées pour les moves.
 
-Exemple implémentée : `C:\Dev\Project\IDLE Isekai Chill` — `old_assets/`, `old_v2.1/`, `archive/`.
+Exemple implémentée : `C:\Dev\Project\IDLE Isekai Chill` — `old_assets/`, `old_v2.1/`, `old_2_2/`, `archive/`.
+
+## old_{A}_{B}/ — fin de phase (B)
+
+À chaque **clôture de phase semver** (incrément B), déplacer reliquats vers `old_{A}_{B}/` du **B quitté** :
+
+- Créer le dossier + l'ajouter au `.gitignore` si besoin
+- Documenter dans manifeste cleanup
+- Passe relecture optionnelle : [`relecture-code-hygiene.md`](./relecture-code-hygiene.md)
+
+**Playbook complet :** [`fin-de-B-cleanup.md`](./fin-de-B-cleanup.md)

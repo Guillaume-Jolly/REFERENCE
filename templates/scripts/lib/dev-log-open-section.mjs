@@ -41,17 +41,25 @@ export function appendDevLogOpenSection(root, revision, versionLabel) {
       anchor,
       `${OPEN_HEADER}
 
-> Injecté par \`npm run version:prompt\` / hook Cursor. **Compléter en fin de prompt**.
+> Injecté par \`npm run version:prompt\` / hook Cursor. **Compléter en fin de prompt** (titre, but, Y, validations).
 
 ${anchor}`,
     )
   }
 
   const sectionHeader = `### X=${revision} —`
-  if (content.includes(sectionHeader)) return
+  if (content.includes(sectionHeader)) {
+    return
+  }
+
+  const headerIdx = content.indexOf(OPEN_HEADER)
+  if (headerIdx < 0) {
+    console.warn(`[${label}] En-tête sections ouvertes introuvable`)
+    return
+  }
 
   const historyMarker = '## Historique complété'
-  const historyIdx = content.indexOf(historyMarker)
+  const historyIdx = content.indexOf(historyMarker, headerIdx)
   if (historyIdx < 0) {
     console.warn(`[${label}] Marqueur historique DEV_LOG introuvable`)
     return

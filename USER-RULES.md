@@ -8,12 +8,14 @@ Copier ce bloc dans **Cursor → Settings → Rules → User Rules**.
 # Règles transverses — tous projets
 
 Processus détaillés : C:\Dev\Project\REFERENCE\docs\INDEX.md
+Copie infra projet : C:\Dev\Project\REFERENCE\docs\processes\copier-infra-reference.md
 
 ## Aucune suppression définitive
 
 - Agent / scripts : **jamais** supprimer un fichier du disque (`rm`, `Remove-Item`, `Delete` tool, `git clean`, vider un dossier).
 - Seule action pour « retirer » : **déplacer** (`git mv` ou `mv`) vers un dossier **gitignoré** (`.gitignore`).
-- Exemples : `old_assets/`, `old_v2.1/`, `archive/YYYY-MM-DD-<motif>/`, chemins définis dans le AGENTS.md du projet.
+- Exemples : `old_assets/`, `old_v2.1/`, **`old_{A}_{B}/`** (ex. `old_2_2/`, `old_2_3/`), `archive/YYYY-MM-DD-<motif>/`.
+- Fin de phase B : checklist `fin-de-B-cleanup.md` dans REFERENCE.
 - **Purge** des gitignorés : uniquement Guillaume — manuellement sur le PC ou copie vers **autre disque (DD)**.
 - « Nettoyer » = trier, documenter, move gitignore — pas supprimer.
 
@@ -33,4 +35,5 @@ Install : npm run hooks:install (par clone)
 - Un seul writer agent par working tree
 - Push main / MEP : go explicite du décideur
 - Diffs petits ; pas de mélange feature/refactor/bugfix sans accord
+- Nouveau projet : copier infra REFERENCE + `version.config.json`, pas réinventer
 ```

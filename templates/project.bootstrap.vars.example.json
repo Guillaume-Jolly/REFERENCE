@@ -1,0 +1,13 @@
+{
+  "projectPath": "C:\\Dev\\Project\\MonApp",
+  "projectName": "mon-app",
+  "projectLabel": "Mon App",
+  "semver": "1.0.0",
+  "gitBranch": "main",
+  "devLogRelativePath": "docs/traceability/changelog/DEV_LOG.md",
+  "versionIndexRelativePath": "docs/traceability/changelog/VERSION-INDEX.md",
+  "releaseEventsRelativePath": "docs/traceability/changelog/release-events.jsonl",
+  "gitignoreArchiveDirs": ["old_assets/", "old_v2.1/", "archive/"],
+  "referenceImplementationPath": "C:\\Dev\\Project\\IDLE Isekai Chill",
+  "validateScripts": ["npm run build"]
+}

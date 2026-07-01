@@ -19,14 +19,19 @@ Avant tout travail sur **un autre repo**, lire :
 - **MEP (A)** : agent propose, humain valide — jamais `version:mep` sans accord
 - Diffs petits, reviewables ; pas de mélange feature/refactor/bugfix
 
-## Bootstrap nouveau projet
+## Bootstrap / upgrade projet
+
+**Playbook agent (prompt utilisateur + checklist) :** [`docs/processes/copier-infra-reference.md`](./docs/processes/copier-infra-reference.md)
 
 ```bash
-cd C:\Dev\Project\REFERENCE
-node scripts/bootstrap-project.mjs "C:\Dev\Project\{MonApp}"
+# Nouveau
+node scripts/bootstrap-project.mjs "C:\Dev\Project\{MonApp}" --vars "...\project.bootstrap.vars.json"
+
+# Existant — resync infra sans écraser DEV_LOG / AGENTS métier
+node scripts/upgrade-project-from-reference.mjs "C:\Dev\Project\{MonApp}" --vars "...\project.bootstrap.vars.json"
 ```
 
-Ou manuel : [`install-nouveau-projet.md`](./docs/processes/install-nouveau-projet.md).
+Manuel : [`install-nouveau-projet.md`](./docs/processes/install-nouveau-projet.md).
 
 ## User Rules Cursor
 

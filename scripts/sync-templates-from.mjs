@@ -21,6 +21,8 @@ const pairs = [
   ['scripts/hooks-install.mjs', 'scripts/hooks-install.mjs'],
   ['scripts/git-hooks/on-pre-push.mjs', 'scripts/git-hooks/on-pre-push.mjs'],
   ['scripts/lib/worktree-fingerprint.mjs', 'scripts/lib/worktree-fingerprint.mjs'],
+  ['scripts/lib/version-config.mjs', 'scripts/lib/version-config.mjs'],
+  ['scripts/lib/dev-log-open-section.mjs', 'scripts/lib/dev-log-open-section.mjs'],
   ['scripts/lib/version-hook-log.mjs', 'scripts/lib/version-hook-log.mjs'],
   ['scripts/lib/version-hook-output.mjs', 'scripts/lib/version-hook-output.mjs'],
   ['scripts/lib/release-version.mjs', 'scripts/lib/release-version.mjs'],
@@ -29,7 +31,7 @@ const pairs = [
   ['.githooks/pre-push', 'githooks/pre-push'],
   ['.cursor/rules/01-no-deletion-archive-only.mdc', 'cursor/rules/01-no-deletion-archive-only.mdc'],
   ['.cursor/rules/02-version-prompt-first.mdc', 'cursor/rules/02-version-prompt-first.mdc'],
-  ['.cursor/rules/03-version-release-ABC.mdc', 'cursor/rules/03-version-release-ABC.mdc'],
+  // 03-version-release-ABC.mdc : template générique REFERENCE (pas sync IDLE — chemins projet)
 ]
 
 for (const [from, to] of pairs) {

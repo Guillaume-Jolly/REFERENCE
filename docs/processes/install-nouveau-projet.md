@@ -1,10 +1,13 @@
 # Install — 2 méthodes
 
+**Playbook agent (recommandé pour Cursor) :** [`copier-infra-reference.md`](./copier-infra-reference.md)
+
 ## A. Automatique (recommandé)
 
 ```powershell
 cd C:\Dev\Project\REFERENCE
-node scripts/bootstrap-project.mjs "C:\Dev\Project\MonApp"
+# Remplir project.bootstrap.vars.json dans le projet cible (voir templates/project.bootstrap.vars.example.json)
+node scripts/bootstrap-project.mjs "C:\Dev\Project\MonApp" --vars "C:\Dev\Project\MonApp\project.bootstrap.vars.json"
 cd C:\Dev\Project\MonApp
 npm run hooks:install
 ```

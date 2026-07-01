@@ -18,16 +18,18 @@ Dès le **1er message** si :
 
 | # | Action |
 |---|--------|
+| 0 | **Fin de B** — archiver reliquats phase quittée → `old_{A}_{B}/` ([`fin-de-B-cleanup.md`](./fin-de-B-cleanup.md)) |
 | 1 | Sync `main` |
 | 2 | `git checkout -b feature/{N}` |
 | 3 | `package.json` → `{N}.0.0` |
 | 4 | `build-revision.json` → `{ revision: 1, subRevision: 0 }` |
-| 5 | Créer `DEV_LOG_{phase}.md` avec section `⚠️ Sections ouvertes` |
-| 6 | Vérifier `.cursor/hooks.json` + `npm run hooks:install` |
-| 7 | `.ai/current-state.md`, `project-state.md`, brief handoff |
-| 8 | Premier prompt travail → X bump (hook ou `version:prompt`) |
-| 9 | `npm run build` (ou validate projet) |
-| 10 | Commit kickoff **si user demande** |
+| 5 | Mettre à jour `version.config.json` (`devLogRelativePath` → nouveau DEV_LOG) |
+| 6 | Créer `DEV_LOG_{phase}.md` avec section `⚠️ Sections ouvertes` |
+| 7 | Vérifier `.cursor/hooks.json` + `npm run hooks:install` |
+| 8 | `.ai/current-state.md`, `project-state.md`, brief handoff |
+| 9 | Premier prompt travail → X bump (hook ou `version:prompt`) |
+| 10 | `npm run build` (ou validate projet) |
+| 11 | Commit kickoff **si user demande** |
 
 ## Ce qu’un kickoff n’est pas
 

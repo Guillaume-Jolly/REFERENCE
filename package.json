@@ -6,6 +6,7 @@
   "description": "Processus et templates agents multi-projets",
   "scripts": {
     "bootstrap": "node scripts/bootstrap-project.mjs",
+    "upgrade": "node scripts/upgrade-project-from-reference.mjs",
     "sync:from-idle": "node scripts/sync-templates-from.mjs \"C:\\Dev\\Project\\IDLE Isekai Chill\""
   }
 }
