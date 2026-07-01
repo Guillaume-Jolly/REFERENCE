@@ -36,6 +36,7 @@
 
 ## Référence implémentée
 
-| Projet | Chemin |
-|--------|--------|
-| IDLE Isekai Chill | `C:\Dev\Project\IDLE Isekai Chill` |
+| Projet | Chemin | Fiche |
+|--------|--------|-------|
+| IDLE Isekai Chill | `C:\Dev\Project\IDLE Isekai Chill` | [`projects/idle-isekai-chill.md`](../projects/idle-isekai-chill.md) |
+| MTG Tracker | `C:\Dev\Project\MTG TRACKER` | [`projects/mtg-tracker.md`](../projects/mtg-tracker.md) |

@@ -3,17 +3,20 @@
  */
 import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { basename, dirname, join } from 'node:path'
+import { renderCiWorkflow } from './ci-workflow.mjs'
 
 export function parseBootstrapArgs(argv) {
   const positional = []
   let varsPath = null
   let dryRun = false
   let forceConfig = false
+  let forceCi = false
 
   for (let i = 2; i < argv.length; i += 1) {
     const arg = argv[i]
     if (arg === '--dry-run') dryRun = true
     else if (arg === '--force-config') forceConfig = true
+    else if (arg === '--force-ci') forceCi = true
     else if (arg === '--vars' && argv[i + 1]) {
       varsPath = argv[i + 1]
       i += 1
@@ -25,6 +28,7 @@ export function parseBootstrapArgs(argv) {
     varsPath,
     dryRun,
     forceConfig,
+    forceCi,
   }
 }
 
@@ -43,6 +47,11 @@ export function loadVars(varsPath, targetRoot) {
     gitignoreArchiveDirs: ['old_assets/', 'old_v2.1/', 'archive/'],
     referenceImplementationPath: 'C:\\Dev\\Project\\IDLE Isekai Chill',
     validateScripts: ['npm run build'],
+    ciProfile: null,
+    ciNodeVersion: null,
+    ciPythonVersion: null,
+    ciPythonTestCommand: null,
+    ciExtraSteps: [],
   }
 
   if (!varsPath || !existsSync(varsPath)) return defaults
@@ -191,6 +200,7 @@ export function installReferenceInfra({
   mode,
   dryRun,
   forceConfig,
+  forceCi,
   vars,
 }) {
   const templates = join(refRoot, 'templates')
@@ -240,7 +250,7 @@ export function installReferenceInfra({
   mergePackageScripts(targetRoot, templates, dryRun)
   mergeGitignore(targetRoot, templates, dryRun)
   installDevLauncher(refRoot, targetRoot, vars, dryRun)
-  installGithubAndEnv(refRoot, targetRoot, templates, mode, dryRun)
+  installGithubAndEnv(refRoot, targetRoot, templates, mode, dryRun, { forceCi, vars })
   installViteTemplate(refRoot, targetRoot, templates, mode, dryRun)
   writeVersionConfig(targetRoot, vars, { dryRun, forceConfig, mode: mode === 'bootstrap' ? 'bootstrap' : 'upgrade' })
   applyProjectVars(targetRoot, templates, vars, dryRun)
@@ -292,17 +302,25 @@ function installDevLauncher(refRoot, targetRoot, vars, dryRun) {
   }
 }
 
-function installGithubAndEnv(refRoot, targetRoot, templates, mode, dryRun) {
-  const ghWorkflow = join(templates, 'github', 'workflows', 'ci.yml')
-  const ghPr = join(templates, 'github', 'pull_request_template.md')
+function installGithubAndEnv(refRoot, targetRoot, templates, mode, dryRun, { forceCi = false, vars = {} } = {}) {
   const destWorkflow = join(targetRoot, '.github', 'workflows', 'ci.yml')
   const destPr = join(targetRoot, '.github', 'pull_request_template.md')
+  const ghPr = join(templates, 'github', 'pull_request_template.md')
 
-  if (mode === 'bootstrap' || !existsSync(destWorkflow)) {
-    copyIfMissing(ghWorkflow, destWorkflow, dryRun)
+  const shouldWriteCi =
+    mode === 'bootstrap' || !existsSync(destWorkflow) || forceCi || Boolean(vars.ciProfile)
+
+  if (shouldWriteCi) {
+    const yaml = renderCiWorkflow(vars, targetRoot)
+    logAction(dryRun, `[write] ${destWorkflow} (profil CI adaptatif)`)
+    if (!dryRun) {
+      mkdirSync(dirname(destWorkflow), { recursive: true })
+      writeFileSync(destWorkflow, yaml)
+    }
   } else {
-    logAction(dryRun, `[skip-existing] ${destWorkflow}`)
+    logAction(dryRun, `[skip-existing] ${destWorkflow} (utiliser --force-ci pour régénérer)`)
   }
+
   if (mode === 'bootstrap' || !existsSync(destPr)) {
     copyIfMissing(ghPr, destPr, dryRun)
   }

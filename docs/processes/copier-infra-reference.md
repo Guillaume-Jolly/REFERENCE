@@ -38,7 +38,7 @@ Vérifie npm run hooks:install + un test hook. Résume le diff infra.
 | 0 | Lire | Ce fichier + [`versionnement-global.md`](./versionnement-global.md) + [`archive-only.md`](./archive-only.md) |
 | 1 | Variables | Copier [`templates/project.bootstrap.vars.example.json`](../../templates/project.bootstrap.vars.example.json) → `{projet}/project.bootstrap.vars.json` et remplir |
 | 2a | **Nouveau** | `node C:\Dev\Project\REFERENCE\scripts\bootstrap-project.mjs "{projet}" --vars "{projet}\project.bootstrap.vars.json"` |
-| 2b | **Existant** | `node C:\Dev\Project\REFERENCE\scripts\upgrade-project-from-reference.mjs "{projet}" --vars "{projet}\project.bootstrap.vars.json"` |
+| 2b | **Existant** | `node …/upgrade-project-from-reference.mjs "{projet}" --vars …` (+ `--force-ci` pour régénérer le workflow GitHub) |
 | 3 | Git hooks | `cd "{projet}"` → `npm run hooks:install` |
 | 4 | AGENTS | Si `AGENTS.md` existait : **fusionner** le snippet REFERENCE (ne pas écraser les règles métier) |
 | 5 | DOC index | Mettre à jour `docs/DOC_AGENT_INDEX.md` (lien REFERENCE déjà dans le template) |
@@ -64,7 +64,12 @@ Fichier : `project.bootstrap.vars.json` (racine du projet cible, gitignorable ou
 | `gitBranch` | `feature/2.2` | `project-state.md` (placeholder) |
 | `devLogRelativePath` | `docs/.../DEV_LOG_2_2.md` | Journal X/Y — **unique par phase** |
 | `gitignoreArchiveDirs` | `old_assets/`, `old_{A}_{B}/` (ex. `old_2_2/`), `archive/` | Zones move-only — fin de B |
-| `validateScripts` | `npm run build`, `validate:*` | Documenter dans AGENTS.md |
+| `validateScripts` | `npm run build`, `validate:*` | Documenter dans AGENTS.md ; certains alimentent le CI |
+| `ciProfile` | `node-scripts` \| `node-vite` \| `node-python` | CI GitHub — auto si `null` |
+| `ciNodeVersion` | `22` | Version Node Actions |
+| `ciPythonVersion` | `3.11` | Si profil `node-python` |
+| `ciPythonTestCommand` | `python -m unittest …` | Override commande tests Python |
+| `ciExtraSteps` | `["npm run validate:foo"]` | Étapes CI additionnelles |
 | `referenceImplementationPath` | IDLE Isekai Chill | Pointeur doc |
 
 Phase IDLE exemple :
@@ -128,13 +133,29 @@ Puis sur chaque projet consommateur : **upgrade** (pas bootstrap).
 
 ---
 
+## CI GitHub (profils adaptatifs)
+
+Le workflow n'est **plus** un `npm ci` générique : il est généré par `scripts/lib/ci-workflow.mjs`.
+
+| `ciProfile` | Quand l'utiliser |
+|-------------|------------------|
+| `node-scripts` | Scripts npm sans dépendances (pas de lockfile) |
+| `node-vite` | Projet avec deps npm (Vite, React, etc.) |
+| `node-python` | Backend Python + infra Node (ex. MTG Tracker) |
+
+Auto-détection si `ciProfile` est `null`. Régénérer sur projet existant : `--force-ci`.
+
+Fiches : [`projects/mtg-tracker.md`](../../projects/mtg-tracker.md), [`projects/idle-isekai-chill.md`](../../projects/idle-isekai-chill.md).
+
+---
+
 ## Anti-patterns
 
 - ❌ Ouvrir REFERENCE + projet actif dans le **même** workspace **sans** vérifier quel `projectRoot` les hooks loggent
 - ❌ Bootstrap sur un repo déjà configuré (préférer **upgrade**)
 - ❌ Écraser un `DEV_LOG_2_2.md` rempli de contenu
 - ❌ Supprimer d'anciens hooks — **move** vers `old_{A}_{B}/` (ex. `old_2_2/cursor-hooks-legacy/`)
-- ❌ Mélanger commit infra + feature gameplay dans le même commit
+- ❌ Copier `ci.yml` avec `npm ci` sur un projet sans `package-lock.json`
 
 ---
 

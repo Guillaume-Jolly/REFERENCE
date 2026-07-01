@@ -17,11 +17,11 @@ import {
 } from './lib/bootstrap-lib.mjs'
 
 const refRoot = join(dirname(fileURLToPath(import.meta.url)), '..')
-const { targetRoot, varsPath, dryRun, forceConfig } = parseBootstrapArgs(process.argv)
+const { targetRoot, varsPath, dryRun, forceConfig, forceCi } = parseBootstrapArgs(process.argv)
 
 if (!targetRoot) {
   console.error(
-    'Usage: node scripts/upgrade-project-from-reference.mjs <chemin-projet> [--vars vars.json] [--force-config] [--dry-run]',
+    'Usage: node scripts/upgrade-project-from-reference.mjs <chemin-projet> [--vars vars.json] [--force-config] [--force-ci] [--dry-run]',
   )
   process.exit(1)
 }
@@ -37,6 +37,7 @@ vars.projectPath = targetRoot
 console.log(`[upgrade] Cible: ${targetRoot}`)
 if (dryRun) console.log('[upgrade] Mode dry-run — aucune écriture')
 if (forceConfig) console.log('[upgrade] --force-config : version.config.json sera réécrit')
+if (forceCi) console.log('[upgrade] --force-ci : .github/workflows/ci.yml sera régénéré')
 
 installReferenceInfra({
   refRoot,
@@ -44,6 +45,7 @@ installReferenceInfra({
   mode: 'upgrade',
   dryRun,
   forceConfig,
+  forceCi,
   vars,
 })
 

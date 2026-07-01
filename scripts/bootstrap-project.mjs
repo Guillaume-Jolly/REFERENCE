@@ -41,6 +41,7 @@ installReferenceInfra({
   mode: 'bootstrap',
   dryRun,
   forceConfig: false,
+  forceCi: false,
   vars,
 })
 

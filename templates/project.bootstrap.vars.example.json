@@ -9,5 +9,10 @@
   "releaseEventsRelativePath": "docs/traceability/changelog/release-events.jsonl",
   "gitignoreArchiveDirs": ["old_assets/", "old_v2.1/", "archive/"],
   "referenceImplementationPath": "C:\\Dev\\Project\\IDLE Isekai Chill",
-  "validateScripts": ["npm run build"]
+  "validateScripts": ["npm run build"],
+  "ciProfile": null,
+  "ciNodeVersion": "22",
+  "ciPythonVersion": "3.11",
+  "ciPythonTestCommand": null,
+  "ciExtraSteps": []
 }

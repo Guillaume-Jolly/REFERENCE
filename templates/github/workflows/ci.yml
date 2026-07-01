@@ -1,36 +1,19 @@
-name: CI
+# CI workflow (référence statique)
 
-on:
-  push:
-    branches: [main, master, 'feature/**']
-  pull_request:
-    branches: [main, master]
+Le fichier **réel** copié dans les projets est **généré** par `scripts/lib/ci-workflow.mjs` au bootstrap / upgrade.
 
-jobs:
-  validate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+Profils :
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: npm
+| `ciProfile` | Usage |
+|-------------|--------|
+| `node-scripts` | Scripts npm sans dépendances (défaut) — pas de `npm ci` |
+| `node-vite` | Projet avec `dependencies` / `devDependencies` — `npm ci` + cache |
+| `node-python` | PWA Python + infra Node — `validate:stack` + `unittest` |
 
-      - name: Install
-        run: npm ci
+Auto-détection si `ciProfile` absent : deps npm → `node-vite`, marqueurs Python → `node-python`, sinon `node-scripts`.
 
-      - name: Install git hooks path (validate stack)
-        run: npm run hooks:install
+Régénérer dans un projet existant :
 
-      - name: Validate infra stack
-        run: npm run validate:stack
-
-      # Scripts validate:* spécifiques projet — voir REFERENCE/projects/{projet}.md
-      # Exemple IDLE (décommenter / adapter) :
-      # - run: npm run validate:companion-bonds
-      # - run: npm run validate:link-corpus
-
-      - name: Build
-        run: npm run build
-        continue-on-error: false
+```bash
+node REFERENCE/scripts/upgrade-project-from-reference.mjs "{projet}" --vars project.bootstrap.vars.json --force-ci
+```

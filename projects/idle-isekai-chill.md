@@ -26,15 +26,20 @@
 
 ## CI GitHub (projet IDLE)
 
-Décommenter / adapter dans `.github/workflows/ci.yml` :
+Profil recommandé dans `project.bootstrap.vars.json` :
 
-```yaml
-- run: npm run validate:companion-bonds
-- run: npm run validate:link-corpus
-- run: npm run tnr:baseline   # si baseline assets
+```json
+"ciProfile": "node-vite",
+"validateScripts": ["npm run build", "npm run validate:companion-bonds", "npm run validate:link-corpus"]
 ```
 
-Ne pas mettre ces scripts dans le template générique REFERENCE.
+Étapes spécifiques IDLE (hors template générique) — via `validateScripts` ou `ciExtraSteps` :
+
+```json
+"ciExtraSteps": ["npm run validate:companion-bonds", "npm run validate:link-corpus"]
+```
+
+Ne pas hardcoder ces scripts dans le template CI générique — voir fiche projet.
 
 
 ## Bootstrap autre projet
