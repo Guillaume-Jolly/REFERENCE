@@ -11,6 +11,7 @@ Copiés par `bootstrap-project.mjs` / `upgrade-project-from-reference.mjs` :
 | `scripts/` | Versionnement A.B.C.X.Y, hooks git, libs génériques |
 | `githooks/` | `pre-push` → bump B/C |
 | `cursor/hooks/` + `hooks.json` | Hooks Cursor X/Y |
+| `dev-launcher/` | Lanceur dev + dashboard (port configurable) |
 | `cursor/rules/` | Archive, version prompt, release ABC |
 | `traceability/` | DEV_LOG, VERSION-INDEX, project-state (stubs) |
 | `version.config.json` | Variables projet (chemins DEV_LOG, label, archives) |

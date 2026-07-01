@@ -7,6 +7,7 @@
   "scripts": {
     "bootstrap": "node scripts/bootstrap-project.mjs",
     "upgrade": "node scripts/upgrade-project-from-reference.mjs",
+    "install:dev-launcher": "node scripts/install-dev-launcher.mjs",
     "sync:from-idle": "node scripts/sync-templates-from.mjs \"C:\\Dev\\Project\\IDLE Isekai Chill\""
   }
 }

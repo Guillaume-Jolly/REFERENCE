@@ -229,19 +229,65 @@ export function installReferenceInfra({
 
   mergePackageScripts(targetRoot, templates, dryRun)
   mergeGitignore(targetRoot, templates, dryRun)
+  installDevLauncher(refRoot, targetRoot, vars, dryRun)
   writeVersionConfig(targetRoot, vars, { dryRun, forceConfig, mode: mode === 'bootstrap' ? 'bootstrap' : 'upgrade' })
   applyProjectVars(targetRoot, templates, vars, dryRun)
 
   return actions
 }
 
+function installDevLauncher(refRoot, targetRoot, vars, dryRun) {
+  const src = join(refRoot, 'templates', 'dev-launcher')
+  const dest = join(targetRoot, 'scripts', 'dev-launcher')
+  logAction(dryRun, `[copy] dev-launcher → scripts/dev-launcher`)
+  if (!dryRun) {
+    mkdirSync(dest, { recursive: true })
+    cpSync(src, dest, { recursive: true, force: true })
+  }
+
+  const configPath = join(targetRoot, 'dev-launcher.config.json')
+  if (!existsSync(configPath)) {
+    const example = readFileSync(join(src, 'dev-launcher.config.example.json'), 'utf8')
+    const base = JSON.parse(example)
+    const payload = {
+      ...base,
+      projectLabel: vars.projectLabel ?? base.projectLabel,
+    }
+    logAction(dryRun, `[write] dev-launcher.config.json`)
+    if (!dryRun) writeFileSync(configPath, `${JSON.stringify(payload, null, 2)}\n`)
+  }
+
+  const batSrc = join(src, 'Dev Launcher.bat')
+  const batDest = join(targetRoot, 'Dev Launcher.bat')
+  copyIfMissing(batSrc, batDest, dryRun)
+
+  const pkgPath = join(targetRoot, 'package.json')
+  if (existsSync(pkgPath) && !dryRun) {
+    const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'))
+    pkg.scripts = { ...pkg.scripts, 'dev:launcher': 'node scripts/dev-launcher/server.mjs' }
+    writeFileSync(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`)
+  } else if (dryRun) {
+    logAction(dryRun, '[merge] package.json dev:launcher script')
+  }
+
+  const gitignorePath = join(targetRoot, '.gitignore')
+  const sessionLine = 'scripts/dev-launcher/.dev-session/'
+  if (existsSync(gitignorePath)) {
+    const current = readFileSync(gitignorePath, 'utf8')
+    if (!current.includes('.dev-session') && !dryRun) {
+      writeFileSync(gitignorePath, `${current.trimEnd()}\n\n# Dev launcher session\n${sessionLine}\n`)
+    }
+  }
+}
+
 export function printPostInstallSteps(targetRoot, refRoot, mode) {
   console.log(`\n[${mode}] Terminé pour: ${targetRoot}`)
   console.log('  1. cd projet cible → npm run hooks:install')
-  console.log('  2. Vérifier version.config.json (chemins DEV_LOG, projectLabel)')
+  console.log('  2. Vérifier version.config.json + dev-launcher.config.json')
   console.log('  3. Compléter AGENTS.md / docs/DOC_AGENT_INDEX.md si projet existant')
   console.log('  4. Redémarrer Cursor — workspace trusted')
   console.log('  5. User Rules ← REFERENCE/USER-RULES.md (une fois, global Cursor)')
   console.log('  6. Test hook : envoyer un message → Hooks Output → executionLogLabel')
-  console.log(`  7. Playbook agent : ${join(refRoot, 'docs', 'processes', 'copier-infra-reference.md')}`)
+  console.log('  7. Dev : npm run dev:launcher — voir docs/processes/dev-launcher.md')
+  console.log(`  8. Playbook agent : ${join(refRoot, 'docs', 'processes', 'copier-infra-reference.md')}`)
 }

@@ -44,7 +44,7 @@ Vérifie npm run hooks:install + un test hook. Résume le diff infra.
 | 5 | DOC index | Mettre à jour `docs/DOC_AGENT_INDEX.md` (lien REFERENCE déjà dans le template) |
 | 6 | Cursor | Rappeler : workspace **trusted**, redémarrage si hooks inactifs |
 | 7 | User Rules | Une fois global : [`USER-RULES.md`](../../USER-RULES.md) → Cursor Settings |
-| 8 | Valider | Voir section **Vérification** ci-dessous |
+| 8 | Valider | `npm run hooks:install` + `npm run dev:launcher` (dashboard versions) |
 | 9 | Commit | 1 commit infra dédié — message type `chore: bootstrap infra REFERENCE` (si user demande commit) |
 
 **Dry-run d'abord si doute :** ajouter `--dry-run` à bootstrap ou upgrade.
