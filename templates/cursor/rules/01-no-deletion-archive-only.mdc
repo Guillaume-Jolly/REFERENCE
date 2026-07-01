@@ -15,7 +15,7 @@ alwaysApply: true
 
 **Déplacer** (`git mv`, `mv`, `Move-Item`) vers un dossier **gitignoré** :
 
-| Destination type | Exemples (IDLE Isekai) |
+| Destination type | Exemples |
 |------------------|------------------------|
 | Archive locale gitignorée | `old_assets/`, `old_v2.1/`, **`old_{A}_{B}/`** (ex. `old_2_2/`), `archive/YYYY-MM-DD-<motif>/` |
 | Drops / temp gitignorés | `Input chatgpt/`, `.tmp/` |
