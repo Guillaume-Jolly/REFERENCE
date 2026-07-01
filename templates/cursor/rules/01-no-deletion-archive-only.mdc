@@ -1,0 +1,41 @@
+---
+description: Jamais de suppression — uniquement déplacer vers dossiers gitignorés (purge manuelle user)
+alwaysApply: true
+---
+
+# Aucune suppression — déplacer vers gitignore uniquement
+
+## Règle absolue
+
+**Ne jamais supprimer définitivement** un fichier ou dossier du disque.
+
+**Interdit :** `Remove-Item`, `rm -rf`, `git clean`, `Delete` tool, vider un dossier d’archive, `git rm` sans accord explicite fichier par fichier.
+
+## Seule action autorisée pour « retirer » du projet
+
+**Déplacer** vers un dossier **gitignoré** (présent dans `.gitignore`) :
+
+- `old_assets/`, `old_v2.1/`, `archive/YYYY-MM-DD-<motif>/`
+- Autres chemins gitignorés définis dans le `AGENTS.md` du projet
+
+## Qui purge ?
+
+- **Agent : jamais.**
+- **Décideur (Guillaume) :** nettoyage manuel des gitignorés ou copie vers **autre disque (DD)**.
+
+## Moves
+
+| Type | Commande |
+|------|----------|
+| Fichier git | `git mv` → zone gitignorée (reste sur disque) |
+| Non versionné | `mv` / `Move-Item` → zone gitignorée |
+
+Documenter les lots dans un manifeste cleanup si significatif.
+
+## « Nettoyer »
+
+= trier, gitignore, documenter, **déplacer** — pas supprimer.
+
+## Vrai retrait disque
+
+Uniquement sur demande explicite fichier par fichier ; proposer move gitignoré d’abord.

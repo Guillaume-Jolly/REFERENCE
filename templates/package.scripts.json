@@ -1,0 +1,8 @@
+{
+  "version:prompt": "node scripts/bump-prompt.mjs",
+  "version:task": "node scripts/bump-task.mjs",
+  "version:branch-push": "node scripts/bump-branch-push.mjs",
+  "version:main-push": "node scripts/bump-main-push.mjs",
+  "version:mep": "node scripts/bump-mep.mjs",
+  "hooks:install": "node scripts/hooks-install.mjs"
+}
