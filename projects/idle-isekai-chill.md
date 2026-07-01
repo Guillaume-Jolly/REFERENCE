@@ -24,7 +24,18 @@
 | **Archives** | `old_assets/`, `old_v2.1/`, `old_2_2/` (hooks legacy phase 2.2) |
 | **Deploy** | `deploy/` gitignoré — PROD locale |
 
-Un **site web pur** n’aurait pas ces validate — seulement le **core** REFERENCE (hooks, version, archive).
+## CI GitHub (projet IDLE)
+
+Décommenter / adapter dans `.github/workflows/ci.yml` :
+
+```yaml
+- run: npm run validate:companion-bonds
+- run: npm run validate:link-corpus
+- run: npm run tnr:baseline   # si baseline assets
+```
+
+Ne pas mettre ces scripts dans le template générique REFERENCE.
+
 
 ## Bootstrap autre projet
 

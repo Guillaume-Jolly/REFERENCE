@@ -19,6 +19,8 @@
 | 13 | [pipeline-validation-pattern.md](./processes/pipeline-validation-pattern.md) | Release gate, validate:*, CI |
 | 14 | [cleanup-manifest-pattern.md](./processes/cleanup-manifest-pattern.md) | Nettoyage = git mv + manifeste |
 | 15 | [codex-report-format.md](./processes/codex-report-format.md) | Rapport Codex / revue Cursor |
+| 16 | [secrets-et-env.md](./processes/secrets-et-env.md) | `.env.example`, jamais committer secrets |
+| 17 | [health-endpoint-pattern.md](./processes/health-endpoint-pattern.md) | `/api/health` Python/Express + build-info Vite |
 
 ## Templates & scripts
 
@@ -26,7 +28,7 @@
 |--------|---------|
 | [`../templates/README.md`](../templates/README.md) | **Core** (tous projets) vs **spécifique** (fiches `projects/`) |
 | [`../templates/dev-launcher/`](../templates/dev-launcher/) | Lanceur dev localhost + dashboard versions |
-| [`../scripts/bootstrap-project.mjs`](../scripts/bootstrap-project.mjs) | Install auto sur un repo |
+| [`../scripts/scaffold-new-project.mjs`](../scripts/scaffold-new-project.mjs) | git init + bootstrap + commit optionnel |
 | [`../scripts/install-dev-launcher.mjs`](../scripts/install-dev-launcher.mjs) | Install lanceur dev seul |
 | [`../scripts/upgrade-project-from-reference.mjs`](../scripts/upgrade-project-from-reference.mjs) | Resync infra projet existant |
 | [`../scripts/sync-templates-from.mjs`](../scripts/sync-templates-from.mjs) | Resync templates depuis projet ref |

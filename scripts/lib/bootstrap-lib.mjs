@@ -114,15 +114,20 @@ export function mergePackageScripts(targetRoot, templates, dryRun) {
 export function mergeGitignore(targetRoot, templates, dryRun) {
   const gitignorePath = join(targetRoot, '.gitignore')
   const snippet = readFileSync(join(templates, 'gitignore.snippet'), 'utf8')
+  const envSnippet = existsSync(join(templates, 'gitignore.env.snippet'))
+    ? readFileSync(join(templates, 'gitignore.env.snippet'), 'utf8')
+    : ''
+  const combined = `${snippet}\n${envSnippet}`.trim()
+
   if (existsSync(gitignorePath)) {
     const current = readFileSync(gitignorePath, 'utf8')
-    if (!current.includes('old_assets/')) {
-      logAction(dryRun, `[merge] .gitignore + archive snippet`)
-      if (!dryRun) writeFileSync(gitignorePath, `${current.trimEnd()}\n\n${snippet}\n`)
+    if (!current.includes('old_assets/') || !current.includes('.env')) {
+      logAction(dryRun, `[merge] .gitignore + snippets`)
+      if (!dryRun) writeFileSync(gitignorePath, `${current.trimEnd()}\n\n${combined}\n`)
     }
   } else {
     logAction(dryRun, `[create] .gitignore`)
-    if (!dryRun) writeFileSync(gitignorePath, `${snippet}\n`)
+    if (!dryRun) writeFileSync(gitignorePath, `${combined}\n`)
   }
 }
 
@@ -203,7 +208,12 @@ export function installReferenceInfra({
   }
 
   mkdirSync(join(targetRoot, '.cursor', 'rules'), { recursive: true })
-  for (const rule of ['01-no-deletion-archive-only.mdc', '02-version-prompt-first.mdc', '03-version-release-ABC.mdc']) {
+  for (const rule of [
+    '01-no-deletion-archive-only.mdc',
+    '02-version-prompt-first.mdc',
+    '03-version-release-ABC.mdc',
+    '04-secrets-env.mdc',
+  ]) {
     forceCopy(join(templates, 'cursor', 'rules', rule), join(targetRoot, '.cursor', 'rules', rule), dryRun)
   }
   forceCopy(join(templates, 'cursor', 'hooks.json'), join(targetRoot, '.cursor', 'hooks.json'), dryRun)
@@ -230,6 +240,8 @@ export function installReferenceInfra({
   mergePackageScripts(targetRoot, templates, dryRun)
   mergeGitignore(targetRoot, templates, dryRun)
   installDevLauncher(refRoot, targetRoot, vars, dryRun)
+  installGithubAndEnv(refRoot, targetRoot, templates, mode, dryRun)
+  installViteTemplate(refRoot, targetRoot, templates, mode, dryRun)
   writeVersionConfig(targetRoot, vars, { dryRun, forceConfig, mode: mode === 'bootstrap' ? 'bootstrap' : 'upgrade' })
   applyProjectVars(targetRoot, templates, vars, dryRun)
 
@@ -280,6 +292,40 @@ function installDevLauncher(refRoot, targetRoot, vars, dryRun) {
   }
 }
 
+function installGithubAndEnv(refRoot, targetRoot, templates, mode, dryRun) {
+  const ghWorkflow = join(templates, 'github', 'workflows', 'ci.yml')
+  const ghPr = join(templates, 'github', 'pull_request_template.md')
+  const destWorkflow = join(targetRoot, '.github', 'workflows', 'ci.yml')
+  const destPr = join(targetRoot, '.github', 'pull_request_template.md')
+
+  if (mode === 'bootstrap' || !existsSync(destWorkflow)) {
+    copyIfMissing(ghWorkflow, destWorkflow, dryRun)
+  } else {
+    logAction(dryRun, `[skip-existing] ${destWorkflow}`)
+  }
+  if (mode === 'bootstrap' || !existsSync(destPr)) {
+    copyIfMissing(ghPr, destPr, dryRun)
+  }
+
+  copyIfMissing(join(templates, 'env.example'), join(targetRoot, '.env.example'), dryRun)
+}
+
+function installViteTemplate(refRoot, targetRoot, templates, mode, dryRun) {
+  const src = join(templates, 'vite')
+  const dest = join(targetRoot, 'vite')
+  if (!existsSync(src)) return
+  if (mode === 'upgrade' && existsSync(join(dest, 'sync-build-info.mjs'))) {
+    forceCopy(join(src, 'sync-build-info.mjs'), join(dest, 'sync-build-info.mjs'), dryRun)
+    copyIfMissing(join(src, 'README.md'), join(dest, 'README.md'), dryRun)
+    return
+  }
+  logAction(dryRun, `[copy] vite/ template`)
+  if (!dryRun) {
+    mkdirSync(dest, { recursive: true })
+    cpSync(src, dest, { recursive: true, force: true })
+  }
+}
+
 export function printPostInstallSteps(targetRoot, refRoot, mode) {
   console.log(`\n[${mode}] Terminé pour: ${targetRoot}`)
   console.log('  1. cd projet cible → npm run hooks:install')
@@ -289,5 +335,6 @@ export function printPostInstallSteps(targetRoot, refRoot, mode) {
   console.log('  5. User Rules ← REFERENCE/USER-RULES.md (une fois, global Cursor)')
   console.log('  6. Test hook : envoyer un message → Hooks Output → executionLogLabel')
   console.log('  7. Dev : npm run dev:launcher — voir docs/processes/dev-launcher.md')
-  console.log(`  8. Playbook agent : ${join(refRoot, 'docs', 'processes', 'copier-infra-reference.md')}`)
+  console.log('  8. npm run validate:stack')
+  console.log(`  9. Playbook agent : ${join(refRoot, 'docs', 'processes', 'copier-infra-reference.md')}`)
 }

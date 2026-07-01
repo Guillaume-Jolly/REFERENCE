@@ -5,5 +5,6 @@
   "version:main-push": "node scripts/bump-main-push.mjs",
   "version:mep": "node scripts/bump-mep.mjs",
   "hooks:install": "node scripts/hooks-install.mjs",
-  "dev:launcher": "node scripts/dev-launcher/server.mjs"
+  "dev:launcher": "node scripts/dev-launcher/server.mjs",
+  "validate:stack": "node scripts/validate-stack.mjs"
 }

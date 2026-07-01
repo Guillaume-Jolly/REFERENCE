@@ -4,37 +4,34 @@
 
 ## Core (bootstrap — tous projets Cursor/Git)
 
-Copiés par `bootstrap-project.mjs` / `upgrade-project-from-reference.mjs` :
+Copiés par `bootstrap-project.mjs` / `upgrade-project-from-reference.mjs` / `scaffold-new-project.mjs` :
 
-| Dossier | Contenu |
-|---------|---------|
-| `scripts/` | Versionnement A.B.C.X.Y, hooks git, libs génériques |
-| `githooks/` | `pre-push` → bump B/C |
+| Dossier / fichier | Contenu |
+|-------------------|---------|
+| `scripts/` | Versionnement, `validate-stack.mjs`, `pre-commit.mjs`, `lint-staged.mjs` |
+| `githooks/` | `pre-push` (B/C), `pre-commit` (stack + lint staged) |
 | `cursor/hooks/` + `hooks.json` | Hooks Cursor X/Y |
-| `dev-launcher/` | Lanceur dev + dashboard (port configurable) |
-| `cursor/rules/` | Archive, version prompt, release ABC |
-| `traceability/` | DEV_LOG, VERSION-INDEX, project-state (stubs) |
-| `version.config.json` | Variables projet (chemins DEV_LOG, label, archives) |
-| `build-revision.json` | Compteurs X/Y |
-| `package.scripts.json` | Scripts npm version:* |
-| `gitignore.snippet` | Archives + agent local |
-
-**Aucune dépendance** BDD, assets jeu, validate métier.
+| `cursor/rules/` | 01 archive, 02 X/Y, 03 ABC, **04 secrets** |
+| `dev-launcher/` | Lanceur dev + dashboard |
+| `vite/` | Plugin `sync-build-info.mjs` (optionnel front) |
+| `github/` | CI workflow + PR template |
+| `env.example` | Variables sans secrets |
+| `traceability/` | DEV_LOG, VERSION-INDEX, project-state |
+| `version.config.json` | Chemins DEV_LOG, archives |
+| `package.scripts.json` | `validate:stack`, `dev:launcher`, version:* |
 
 ## Spécifique projet (hors templates)
 
-Documenter dans [`projects/{nom}.md`](../projects/) — **ne pas** mettre dans `templates/` :
+Documenter dans [`projects/{nom}.md`](../projects/) :
 
 | Exemple IDLE | Où |
 |--------------|-----|
-| `validate:companion-bonds`, `validate:link-corpus` | `projects/idle-isekai-chill.md` |
-| `DEV_LOG_2_2.md` (nom phase) | `version.config.json` du projet |
+| `validate:companion-bonds`, `validate:link-corpus` | `projects/idle-isekai-chill.md` + CI commentée |
 | Assets, staging, deploy | AGENTS.md projet |
 
-## Resync depuis implémentation
+## Scripts REFERENCE
 
-```powershell
-npm run sync:from-idle
-```
-
-Copie **infra générique** IDLE → `templates/`. Puis vérifier que `version-config.mjs` / `dev-log-open-section.mjs` restent génériques (pas de chemins phase en dur).
+| Script | Rôle |
+|--------|------|
+| `scaffold-new-project.mjs` | git init + bootstrap + hooks + `--commit` |
+| `validate:stack` (dans projet cible) | Smoke test infra |
